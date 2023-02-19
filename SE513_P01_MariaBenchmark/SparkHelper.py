@@ -44,4 +44,45 @@ FROM (
         delta = sub_bench_end - sub_bench_start
         return delta
 
+    def calculate_cloud_coverage_over_80_percent(self):
+
+        self.df.createOrReplaceTempView("PT")
+
+        query = """
+-- COUNT OF ROWS WHOSE CLOUD COVERAGE IS OVER 80 PERCENT
+SELECT COUNT(*) AS CLOUD_COVER_OVER_80_PERCENT
+FROM (
+	SELECT *
+	FROM PT
+	WHERE `LAND CLOUD COVER` > 80
+) A"""
+
+        sub_bench_start = time.time()
+        res = self.spark.sql(query)
+        sub_bench_end = time.time()
+
+        delta = sub_bench_end - sub_bench_start
+
+        return delta
+
+    def calculate_satellite_distinct(self):
+
+        self.df.createOrReplaceTempView("PT")
+
+        query = """
+-- COUNT OF ROWS WHOSE CLOUD COVERAGE IS OVER 80 PERCENT
+SELECT COUNT(*) AS CLOUD_COVER_OVER_80_PERCENT
+FROM (
+	SELECT *
+	FROM PT
+	WHERE `LAND CLOUD COVER` > 80
+) A"""
+
+        sub_bench_start = time.time()
+        res = self.spark.sql(query)
+        sub_bench_end = time.time()
+
+        delta = sub_bench_end - sub_bench_start
+
+        return delta
 

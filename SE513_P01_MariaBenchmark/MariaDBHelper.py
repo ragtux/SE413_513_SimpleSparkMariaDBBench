@@ -50,17 +50,32 @@ FROM (
 
         return delta
 
-    def calculate_cloud_cover_over_80(self):
+    def calculate_cloud_coverage_over_80_percent(self):
 
         query = """
--- count of rows whose cloud coverage is over 80 percent
-select count(*) as cloud_cover_over_80_percent
-from (
-	select *
-	from se413_513.l02_utf8 lu
-	where `Land Cloud Cover` > 70
+-- COUNT OF ROWS WHOSE CLOUD COVERAGE IS OVER 80 PERCENT
+SELECT COUNT(*) AS CLOUD_COVER_OVER_80_PERCENT
+FROM (
+	SELECT *
+	FROM se413_513.l02_utf8 lu
+	WHERE `LAND CLOUD COVER` > 80
 ) A"""
+        cur = self.conn.cursor()
 
+        sub_bench_start = time.time()
+        cur.execute(query)
+        sub_bench_end = time.time()
+
+        delta = sub_bench_end - sub_bench_start
+
+        return delta
+
+    def calculate_satellite_distinct(self):
+
+        query = """
+SELECT SATELLITE, COUNT(*)
+FROM SE413_513.L02_UTF8
+GROUP BY SATELLITE"""
         cur = self.conn.cursor()
 
         sub_bench_start = time.time()
