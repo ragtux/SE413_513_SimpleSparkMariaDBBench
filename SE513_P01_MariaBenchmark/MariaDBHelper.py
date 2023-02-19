@@ -24,8 +24,8 @@ class MariaDBHelper:
 -- (1) calculate the center of scene using the midpoint formula
 -- (2) calculate the average midpoint across all scenes (centroid of scenes)
 SELECT 
-	AVG(CALC_CENTER_LONG),
-	AVG(CALC_CENTER_LAT)
+	AVG(CALC_CENTER_LONG) AS AVG_CALC_CENTER_LONG,
+	AVG(CALC_CENTER_LAT) AS AVG_CALC_CENTER_LAT
 FROM (
 	SELECT
 		((LL_X + UR_X) / 2) AS CALC_CENTER_LONG,
@@ -50,4 +50,24 @@ FROM (
 
         return delta
 
-    def
+    def calculate_cloud_cover_over_80(self):
+
+        query = """
+-- count of rows whose cloud coverage is over 80 percent
+select count(*) as cloud_cover_over_80_percent
+from (
+	select *
+	from se413_513.l02_utf8 lu
+	where `Land Cloud Cover` > 70
+) A"""
+
+        cur = self.conn.cursor()
+
+        sub_bench_start = time.time()
+        cur.execute(query)
+        sub_bench_end = time.time()
+
+        delta = sub_bench_end - sub_bench_start
+
+        return delta
+
